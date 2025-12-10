@@ -12,4 +12,5 @@ export type {
   ChatPanelProps,
   GenericChatPanelProps,
   ChatDrawerProps,
+  ChatBarProps,
 } from './types';

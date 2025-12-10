@@ -38,3 +38,8 @@ export interface ChatDrawerProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export interface ChatBarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}

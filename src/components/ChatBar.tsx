@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { GenericChatPanel } from './GenericChatPanel';
-import { ChatMessage, Buddy } from '../types';
+import { ChatMessage, Buddy, ChatBarProps } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 
-interface ChatBarProps {
-  onClose?: () => void;
-}
-
-export function ChatBar({ onClose }: ChatBarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export function ChatBar({ isOpen = false, onClose }: ChatBarProps) {
   const [activeTab, setActiveTab] = useState<'buddies' | 'chat'>('buddies');
   const [selectedBuddy, setSelectedBuddy] = useState<Buddy | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -65,12 +60,7 @@ export function ChatBar({ onClose }: ChatBarProps) {
     setMessages([...messages, newMessage]);
   };
 
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleClose = () => {
-    setIsOpen(false);
     setSelectedBuddy(null);
     setActiveTab('buddies');
     onClose?.();
@@ -99,35 +89,6 @@ export function ChatBar({ onClose }: ChatBarProps) {
 
   return (
     <>
-      {/* Chat Toggle Button */}
-      <div
-        onClick={toggleChat}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          backgroundColor: '#007AFF',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(0, 122, 255, 0.3)',
-          zIndex: 1002,
-          transition: 'transform 0.2s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-      >
-        <span style={{ fontSize: '24px' }}>💬</span>
-      </div>
-
       {/* Chat Panel */}
       {isOpen && (
         <div
