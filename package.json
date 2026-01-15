@@ -1,12 +1,15 @@
 {
-  "name": "iris-chat",
+  "name": "iris-comments",
   "version": "1.0.0",
-  "description": "A cross-platform chat component library for React Native and React Native Web",
+  "description": "A cross-platform comments component library for React Native and React Native Web",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "browser": "dist/index.js",
+  "react-native": "src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "react-native": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
@@ -18,8 +21,8 @@
   "keywords": [
     "react-native",
     "react-native-web",
-    "chat",
-    "messaging",
+    "comments",
+    "commenting",
     "cross-platform"
   ],
   "author": "",

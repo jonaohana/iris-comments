@@ -1,45 +1,71 @@
-// Chat Message Types
-export interface ChatMessage {
+// Comment Types
+export interface Comment {
   id: string;
-  tradeSessionId?: string; // Optional for general chat, required for trade chat
-  senderId: string;
-  senderName: string;
+  entityId: string; // ID of the entity being commented on (listing, post, etc.)
+  userId: string;
+  userName: string;
+  userAvatar?: string;
   text: string;
   createdAt: string;
-  type?: 'user' | 'system';
+  updatedAt?: string;
+  parentId?: string; // For nested replies
+  likes: string[]; // Array of user IDs who liked this comment
+  isEdited?: boolean;
 }
 
-// Buddy/Contact Types
-export interface Buddy {
-  id: string;
-  name: string;
-  avatar?: string;
-  status: 'online' | 'offline' | 'away';
-  lastMessage?: string;
-  unreadCount?: number;
+export interface CommentReaction {
+  commentId: string;
+  userId: string;
+  type: 'like' | 'love' | 'laugh' | 'wow' | 'sad' | 'angry';
+  createdAt: string;
 }
 
 // Component Props
-export interface ChatPanelProps {
-  messages: ChatMessage[];
+export interface CommentPanelProps {
+  entityId: string; // ID of the entity being commented on
+  comments: Comment[];
   currentUserId: string;
-  onSendMessage: (text: string) => void;
-}
-
-export interface GenericChatPanelProps {
-  title: string;
-  messages: ChatMessage[];
-  currentUserId: string;
-  onSendMessage: (text: string) => void;
+  currentUserName: string;
+  currentUserAvatar?: string;
+  onAddComment: (text: string, parentId?: string) => void;
+  onEditComment?: (commentId: string, text: string) => void;
+  onDeleteComment?: (commentId: string) => void;
+  onLikeComment?: (commentId: string) => void;
+  onUnlikeComment?: (commentId: string) => void;
   placeholder?: string;
+  title?: string;
+  showHeader?: boolean;
+  maxNestingLevel?: number; // Default: 3
+  enableLikes?: boolean; // Default: true
+  enableEditing?: boolean; // Default: true
+  enableDeleting?: boolean; // Default: true
+  enableReplies?: boolean; // Default: true
 }
 
-export interface ChatDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
+export interface CommentItemProps {
+  comment: Comment;
+  currentUserId: string;
+  currentUserName: string;
+  currentUserAvatar?: string;
+  nestingLevel: number;
+  maxNestingLevel: number;
+  replies: Comment[];
+  onReply: (text: string, parentId: string) => void;
+  onEdit?: (commentId: string, text: string) => void;
+  onDelete?: (commentId: string) => void;
+  onLike?: (commentId: string) => void;
+  onUnlike?: (commentId: string) => void;
+  enableLikes: boolean;
+  enableEditing: boolean;
+  enableDeleting: boolean;
+  enableReplies: boolean;
 }
 
-export interface ChatBarProps {
-  isOpen?: boolean;
-  onClose?: () => void;
+export interface CommentInputProps {
+  onSubmit: (text: string) => void;
+  placeholder?: string;
+  autoFocus?: boolean;
+  initialValue?: string;
+  onCancel?: () => void;
+  showCancel?: boolean;
 }

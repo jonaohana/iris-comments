@@ -1,16 +1,8 @@
 // Components
-export { GenericChatPanel } from './components/GenericChatPanel';
-export { ChatPanel } from './components/ChatPanel';
-export { ChatDrawer } from './components/ChatDrawer';
-export { ChatBar } from './components/ChatBar';
-export { PlatformPressable } from './components/PlatformPressable';
+export { CommentPanel } from './components/CommentPanel';
+export { CommentList } from './components/CommentList';
+export { CommentItem } from './components/CommentItem';
+export { CommentInput } from './components/CommentInput';
 
-// Types
-export type {
-  ChatMessage,
-  Buddy,
-  ChatPanelProps,
-  GenericChatPanelProps,
-  ChatDrawerProps,
-  ChatBarProps,
-} from './types';
+// Re-export all types from types file
+export * from './types';
