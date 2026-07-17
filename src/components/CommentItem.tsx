@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { CommentItemProps } from '../types';
 import { CommentInput } from './CommentInput';
+import { useCommentTheme } from '../theme';
 
 export const CommentItem: React.FC<CommentItemProps> = ({
   comment,
@@ -29,6 +30,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   enableDeleting,
   enableReplies,
 }) => {
+  const t = useCommentTheme();
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showReplies, setShowReplies] = useState(true);
@@ -86,7 +88,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
           {comment.userAvatar ? (
             <Image source={{ uri: comment.userAvatar }} style={styles.avatar} />
           ) : (
-            <View style={[styles.avatar, styles.avatarPlaceholder]}>
+            <View style={[styles.avatar, styles.avatarPlaceholder, { backgroundColor: t.accent }]}>
               <Text style={styles.avatarText}>
                 {comment.userName.charAt(0).toUpperCase()}
               </Text>
@@ -98,8 +100,8 @@ export const CommentItem: React.FC<CommentItemProps> = ({
         <View style={styles.mainContent}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.userName}>{comment.userName}</Text>
-            <Text style={styles.timestamp}>
+            <Text style={[styles.userName, { color: t.text }]}>{comment.userName}</Text>
+            <Text style={[styles.timestamp, { color: t.textMuted }]}>
               {formatTimestamp(comment.createdAt)}
               {comment.isEdited && ' (edited)'}
             </Text>
@@ -116,7 +118,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               autoFocus={true}
             />
           ) : (
-            <Text style={styles.commentText}>{comment.text}</Text>
+            <Text style={[styles.commentText, { color: t.text }]}>{comment.text}</Text>
           )}
 
           {/* Actions */}
@@ -129,10 +131,10 @@ export const CommentItem: React.FC<CommentItemProps> = ({
                 <Ionicons
                   name={isLiked ? 'heart' : 'heart-outline'}
                   size={16}
-                  color={isLiked ? '#ff3b30' : '#666'}
+                  color={isLiked ? '#ff3b30' : t.textMuted}
                 />
                 {comment.likes.length > 0 && (
-                  <Text style={[styles.actionText, isLiked && styles.likedText]}>
+                  <Text style={[styles.actionText, { color: t.textMuted }, isLiked && styles.likedText]}>
                     {comment.likes.length}
                   </Text>
                 )}
@@ -144,8 +146,8 @@ export const CommentItem: React.FC<CommentItemProps> = ({
                 onPress={() => setShowReplyInput(!showReplyInput)}
                 style={styles.actionButton}
               >
-                <Ionicons name="chatbubble-outline" size={14} color="#666" />
-                <Text style={styles.actionText}>Reply</Text>
+                <Ionicons name="chatbubble-outline" size={14} color={t.textMuted} />
+                <Text style={[styles.actionText, { color: t.textMuted }]}>Reply</Text>
               </TouchableOpacity>
             )}
 
@@ -154,8 +156,8 @@ export const CommentItem: React.FC<CommentItemProps> = ({
                 onPress={() => setIsEditing(true)}
                 style={styles.actionButton}
               >
-                <Ionicons name="create-outline" size={14} color="#666" />
-                <Text style={styles.actionText}>Edit</Text>
+                <Ionicons name="create-outline" size={14} color={t.textMuted} />
+                <Text style={[styles.actionText, { color: t.textMuted }]}>Edit</Text>
               </TouchableOpacity>
             )}
 
@@ -189,9 +191,9 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               <Ionicons
                 name={showReplies ? 'chevron-up' : 'chevron-down'}
                 size={14}
-                color="#007AFF"
+                color={t.accent}
               />
-              <Text style={styles.toggleRepliesText}>
+              <Text style={[styles.toggleRepliesText, { color: t.accent }]}>
                 {showReplies ? 'Hide' : 'Show'} {replies.length}{' '}
                 {replies.length === 1 ? 'reply' : 'replies'}
               </Text>

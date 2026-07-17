@@ -11,7 +11,7 @@ Or use local file reference:
 ```json
 {
   "dependencies": {
-    "iris-comments": "file:../comments"
+    "iris-comments": "file:../iris-comments"
   }
 }
 ```

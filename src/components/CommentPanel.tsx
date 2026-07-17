@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { CommentPanelProps } from '../types';
 import { CommentList } from './CommentList';
 import { CommentInput } from './CommentInput';
+import { CommentThemeContext, DEFAULT_COMMENT_THEME } from '../theme';
 
 export const CommentPanel: React.FC<CommentPanelProps> = ({
   entityId,
@@ -31,8 +32,10 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
   enableEditing = true,
   enableDeleting = true,
   enableReplies = true,
+  theme,
 }) => {
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'popular'>('newest');
+  const t = { ...DEFAULT_COMMENT_THEME, ...(theme ?? {}) };
 
   const sortedComments = [...comments].sort((a, b) => {
     switch (sortBy) {
@@ -57,59 +60,36 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
 
   const commentCount = comments.length;
 
+  const sortBtn = (key: 'newest' | 'oldest' | 'popular', label: string) => {
+    const active = sortBy === key;
+    return (
+      <TouchableOpacity
+        onPress={() => setSortBy(key)}
+        style={[styles.sortButton, { backgroundColor: active ? t.accent : t.surface }]}
+      >
+        <Text style={[styles.sortButtonText, { color: active ? '#fff' : t.textMuted }]}>{label}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View style={styles.container}>
+    <CommentThemeContext.Provider value={t}>
+    <View style={[styles.container, { backgroundColor: t.background }]}>
       {showHeader && (
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: t.border }]}>
           <View style={styles.headerLeft}>
-            <Ionicons name="chatbubbles" size={20} color="#007AFF" />
-            <Text style={styles.title}>{title}</Text>
-            <View style={styles.countBadge}>
-              <Text style={styles.countText}>{commentCount}</Text>
+            <Ionicons name="chatbubbles" size={20} color={t.accent} />
+            <Text style={[styles.title, { color: t.text }]}>{title}</Text>
+            <View style={[styles.countBadge, { backgroundColor: t.surface }]}>
+              <Text style={[styles.countText, { color: t.textMuted }]}>{commentCount}</Text>
             </View>
           </View>
 
           {/* Sort Options */}
           <View style={styles.sortContainer}>
-            <TouchableOpacity
-              onPress={() => setSortBy('newest')}
-              style={[styles.sortButton, sortBy === 'newest' && styles.sortButtonActive]}
-            >
-              <Text
-                style={[
-                  styles.sortButtonText,
-                  sortBy === 'newest' && styles.sortButtonTextActive,
-                ]}
-              >
-                Newest
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setSortBy('popular')}
-              style={[styles.sortButton, sortBy === 'popular' && styles.sortButtonActive]}
-            >
-              <Text
-                style={[
-                  styles.sortButtonText,
-                  sortBy === 'popular' && styles.sortButtonTextActive,
-                ]}
-              >
-                Popular
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setSortBy('oldest')}
-              style={[styles.sortButton, sortBy === 'oldest' && styles.sortButtonActive]}
-            >
-              <Text
-                style={[
-                  styles.sortButtonText,
-                  sortBy === 'oldest' && styles.sortButtonTextActive,
-                ]}
-              >
-                Oldest
-              </Text>
-            </TouchableOpacity>
+            {sortBtn('newest', 'Newest')}
+            {sortBtn('popular', 'Popular')}
+            {sortBtn('oldest', 'Oldest')}
           </View>
         </View>
       )}
@@ -139,9 +119,9 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
           />
         ) : (
           <View style={styles.emptyState}>
-            <Ionicons name="chatbubbles-outline" size={48} color="#ccc" />
-            <Text style={styles.emptyStateText}>No comments yet</Text>
-            <Text style={styles.emptyStateSubtext}>Be the first to comment!</Text>
+            <Ionicons name="chatbubbles-outline" size={48} color={t.textFaint} />
+            <Text style={[styles.emptyStateText, { color: t.textFaint }]}>No comments yet</Text>
+            <Text style={[styles.emptyStateSubtext, { color: t.textFaint }]}>Be the first to comment!</Text>
           </View>
         )}
       </ScrollView>
@@ -149,6 +129,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
       {/* Comment Input */}
       <CommentInput onSubmit={handleAddComment} placeholder={placeholder} />
     </View>
+    </CommentThemeContext.Provider>
   );
 };
 

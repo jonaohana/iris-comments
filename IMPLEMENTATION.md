@@ -98,7 +98,7 @@ comments/
    - Native: Displays in scrollable section (500px height)
 
 3. **`/everglee/package.json`** (MODIFIED)
-   - Added dependency: `"iris-comments": "file:../comments"`
+   - Added dependency: `"iris-comments": "file:../iris-comments"`
 
 ## Mock Data Included
 

@@ -20,8 +20,12 @@ export interface CommentReaction {
   createdAt: string;
 }
 
+import type { CommentTheme } from './theme';
+
 // Component Props
 export interface CommentPanelProps {
+  /** Optional color overrides so the host app can match its own theme (e.g. dark mode). */
+  theme?: Partial<CommentTheme>;
   entityId: string; // ID of the entity being commented on
   comments: Comment[];
   currentUserId: string;

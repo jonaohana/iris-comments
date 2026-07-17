@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { CommentInputProps } from '../types';
+import { useCommentTheme } from '../theme';
 
 export const CommentInput: React.FC<CommentInputProps> = ({
   onSubmit,
@@ -18,6 +19,7 @@ export const CommentInput: React.FC<CommentInputProps> = ({
   onCancel,
   showCancel = false,
 }) => {
+  const t = useCommentTheme();
   const [text, setText] = useState(initialValue);
 
   const handleSubmit = () => {
@@ -35,15 +37,15 @@ export const CommentInput: React.FC<CommentInputProps> = ({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
+      style={[styles.container, { borderTopColor: t.border, backgroundColor: t.background }]}
     >
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { borderColor: t.border, backgroundColor: t.inputBackground, color: t.text }]}
           value={text}
           onChangeText={setText}
           placeholder={placeholder}
-          placeholderTextColor="#999"
+          placeholderTextColor={t.textFaint}
           multiline
           maxLength={1000}
           autoFocus={autoFocus}
@@ -52,9 +54,9 @@ export const CommentInput: React.FC<CommentInputProps> = ({
           {showCancel && (
             <TouchableOpacity
               onPress={handleCancel}
-              style={[styles.button, styles.cancelButton]}
+              style={[styles.button, { backgroundColor: t.surface }]}
             >
-              <Ionicons name="close" size={20} color="#666" />
+              <Ionicons name="close" size={20} color={t.textMuted} />
             </TouchableOpacity>
           )}
           <TouchableOpacity
@@ -62,14 +64,14 @@ export const CommentInput: React.FC<CommentInputProps> = ({
             disabled={!text.trim()}
             style={[
               styles.button,
-              styles.sendButton,
+              { backgroundColor: t.surface },
               !text.trim() && styles.sendButtonDisabled,
             ]}
           >
             <Ionicons
               name="send"
               size={18}
-              color={text.trim() ? '#007AFF' : '#ccc'}
+              color={text.trim() ? t.accent : t.textFaint}
             />
           </TouchableOpacity>
         </View>
