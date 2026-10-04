@@ -38,7 +38,9 @@ const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const vector_icons_1 = require("@expo/vector-icons");
 const CommentInput_1 = require("./CommentInput");
+const theme_1 = require("../theme");
 const CommentItem = ({ comment, currentUserId, currentUserName, currentUserAvatar, nestingLevel, maxNestingLevel, replies, onReply, onEdit, onDelete, onLike, onUnlike, enableLikes, enableEditing, enableDeleting, enableReplies, }) => {
+    const t = (0, theme_1.useCommentTheme)();
     const [showReplyInput, setShowReplyInput] = (0, react_1.useState)(false);
     const [isEditing, setIsEditing] = (0, react_1.useState)(false);
     const [showReplies, setShowReplies] = (0, react_1.useState)(true);
@@ -86,33 +88,33 @@ const CommentItem = ({ comment, currentUserId, currentUserName, currentUserAvata
     const leftMargin = nestingLevel * 30;
     return (react_1.default.createElement(react_native_1.View, { style: [styles.container, { marginLeft: leftMargin }] },
         react_1.default.createElement(react_native_1.View, { style: styles.commentContent },
-            react_1.default.createElement(react_native_1.View, { style: styles.avatarContainer }, comment.userAvatar ? (react_1.default.createElement(react_native_1.Image, { source: { uri: comment.userAvatar }, style: styles.avatar })) : (react_1.default.createElement(react_native_1.View, { style: [styles.avatar, styles.avatarPlaceholder] },
+            react_1.default.createElement(react_native_1.View, { style: styles.avatarContainer }, comment.userAvatar ? (react_1.default.createElement(react_native_1.Image, { source: { uri: comment.userAvatar }, style: styles.avatar })) : (react_1.default.createElement(react_native_1.View, { style: [styles.avatar, styles.avatarPlaceholder, { backgroundColor: t.accent }] },
                 react_1.default.createElement(react_native_1.Text, { style: styles.avatarText }, comment.userName.charAt(0).toUpperCase())))),
             react_1.default.createElement(react_native_1.View, { style: styles.mainContent },
                 react_1.default.createElement(react_native_1.View, { style: styles.header },
-                    react_1.default.createElement(react_native_1.Text, { style: styles.userName }, comment.userName),
-                    react_1.default.createElement(react_native_1.Text, { style: styles.timestamp },
+                    react_1.default.createElement(react_native_1.Text, { style: [styles.userName, { color: t.text }] }, comment.userName),
+                    react_1.default.createElement(react_native_1.Text, { style: [styles.timestamp, { color: t.textMuted }] },
                         formatTimestamp(comment.createdAt),
                         comment.isEdited && ' (edited)')),
-                isEditing ? (react_1.default.createElement(CommentInput_1.CommentInput, { onSubmit: handleEdit, onCancel: () => setIsEditing(false), showCancel: true, initialValue: comment.text, placeholder: "Edit comment...", autoFocus: true })) : (react_1.default.createElement(react_native_1.Text, { style: styles.commentText }, comment.text)),
+                isEditing ? (react_1.default.createElement(CommentInput_1.CommentInput, { onSubmit: handleEdit, onCancel: () => setIsEditing(false), showCancel: true, initialValue: comment.text, placeholder: "Edit comment...", autoFocus: true })) : (react_1.default.createElement(react_native_1.Text, { style: [styles.commentText, { color: t.text }] }, comment.text)),
                 react_1.default.createElement(react_native_1.View, { style: styles.actions },
                     enableLikes && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: handleLikeToggle, style: styles.actionButton },
-                        react_1.default.createElement(vector_icons_1.Ionicons, { name: isLiked ? 'heart' : 'heart-outline', size: 16, color: isLiked ? '#ff3b30' : '#666' }),
-                        comment.likes.length > 0 && (react_1.default.createElement(react_native_1.Text, { style: [styles.actionText, isLiked && styles.likedText] }, comment.likes.length)))),
+                        react_1.default.createElement(vector_icons_1.Ionicons, { name: isLiked ? 'heart' : 'heart-outline', size: 16, color: isLiked ? '#ff3b30' : t.textMuted }),
+                        comment.likes.length > 0 && (react_1.default.createElement(react_native_1.Text, { style: [styles.actionText, { color: t.textMuted }, isLiked && styles.likedText] }, comment.likes.length)))),
                     canReply && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setShowReplyInput(!showReplyInput), style: styles.actionButton },
-                        react_1.default.createElement(vector_icons_1.Ionicons, { name: "chatbubble-outline", size: 14, color: "#666" }),
-                        react_1.default.createElement(react_native_1.Text, { style: styles.actionText }, "Reply"))),
+                        react_1.default.createElement(vector_icons_1.Ionicons, { name: "chatbubble-outline", size: 14, color: t.textMuted }),
+                        react_1.default.createElement(react_native_1.Text, { style: [styles.actionText, { color: t.textMuted }] }, "Reply"))),
                     isOwner && enableEditing && !isEditing && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setIsEditing(true), style: styles.actionButton },
-                        react_1.default.createElement(vector_icons_1.Ionicons, { name: "create-outline", size: 14, color: "#666" }),
-                        react_1.default.createElement(react_native_1.Text, { style: styles.actionText }, "Edit"))),
+                        react_1.default.createElement(vector_icons_1.Ionicons, { name: "create-outline", size: 14, color: t.textMuted }),
+                        react_1.default.createElement(react_native_1.Text, { style: [styles.actionText, { color: t.textMuted }] }, "Edit"))),
                     isOwner && enableDeleting && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: handleDelete, style: styles.actionButton },
                         react_1.default.createElement(vector_icons_1.Ionicons, { name: "trash-outline", size: 14, color: "#ff3b30" }),
                         react_1.default.createElement(react_native_1.Text, { style: [styles.actionText, styles.deleteText] }, "Delete")))),
                 showReplyInput && (react_1.default.createElement(react_native_1.View, { style: styles.replyInputContainer },
                     react_1.default.createElement(CommentInput_1.CommentInput, { onSubmit: handleReply, onCancel: () => setShowReplyInput(false), showCancel: true, placeholder: `Reply to ${comment.userName}...`, autoFocus: true }))),
                 replies.length > 0 && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setShowReplies(!showReplies), style: styles.toggleReplies },
-                    react_1.default.createElement(vector_icons_1.Ionicons, { name: showReplies ? 'chevron-up' : 'chevron-down', size: 14, color: "#007AFF" }),
-                    react_1.default.createElement(react_native_1.Text, { style: styles.toggleRepliesText },
+                    react_1.default.createElement(vector_icons_1.Ionicons, { name: showReplies ? 'chevron-up' : 'chevron-down', size: 14, color: t.accent }),
+                    react_1.default.createElement(react_native_1.Text, { style: [styles.toggleRepliesText, { color: t.accent }] },
                         showReplies ? 'Hide' : 'Show',
                         " ",
                         replies.length,

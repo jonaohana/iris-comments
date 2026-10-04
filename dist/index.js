@@ -14,7 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommentInput = exports.CommentItem = exports.CommentList = exports.CommentPanel = void 0;
+exports.useCommentTheme = exports.DEFAULT_COMMENT_THEME = exports.CommentInput = exports.CommentItem = exports.CommentList = exports.CommentPanel = void 0;
 // Components
 var CommentPanel_1 = require("./components/CommentPanel");
 Object.defineProperty(exports, "CommentPanel", { enumerable: true, get: function () { return CommentPanel_1.CommentPanel; } });
@@ -26,3 +26,7 @@ var CommentInput_1 = require("./components/CommentInput");
 Object.defineProperty(exports, "CommentInput", { enumerable: true, get: function () { return CommentInput_1.CommentInput; } });
 // Re-export all types from types file
 __exportStar(require("./types"), exports);
+// Theming
+var theme_1 = require("./theme");
+Object.defineProperty(exports, "DEFAULT_COMMENT_THEME", { enumerable: true, get: function () { return theme_1.DEFAULT_COMMENT_THEME; } });
+Object.defineProperty(exports, "useCommentTheme", { enumerable: true, get: function () { return theme_1.useCommentTheme; } });

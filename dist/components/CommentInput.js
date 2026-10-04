@@ -37,7 +37,9 @@ exports.CommentInput = void 0;
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const vector_icons_1 = require("@expo/vector-icons");
+const theme_1 = require("../theme");
 const CommentInput = ({ onSubmit, placeholder = 'Write a comment...', autoFocus = false, initialValue = '', onCancel, showCancel = false, }) => {
+    const t = (0, theme_1.useCommentTheme)();
     const [text, setText] = (0, react_1.useState)(initialValue);
     const handleSubmit = () => {
         if (text.trim()) {
@@ -49,18 +51,18 @@ const CommentInput = ({ onSubmit, placeholder = 'Write a comment...', autoFocus 
         setText('');
         onCancel?.();
     };
-    return (react_1.default.createElement(react_native_1.KeyboardAvoidingView, { behavior: react_native_1.Platform.OS === 'ios' ? 'padding' : 'height', style: styles.container },
+    return (react_1.default.createElement(react_native_1.KeyboardAvoidingView, { behavior: react_native_1.Platform.OS === 'ios' ? 'padding' : 'height', style: [styles.container, { borderTopColor: t.border, backgroundColor: t.background }] },
         react_1.default.createElement(react_native_1.View, { style: styles.inputContainer },
-            react_1.default.createElement(react_native_1.TextInput, { style: styles.input, value: text, onChangeText: setText, placeholder: placeholder, placeholderTextColor: "#999", multiline: true, maxLength: 1000, autoFocus: autoFocus }),
+            react_1.default.createElement(react_native_1.TextInput, { style: [styles.input, { borderColor: t.border, backgroundColor: t.inputBackground, color: t.text }], value: text, onChangeText: setText, placeholder: placeholder, placeholderTextColor: t.textFaint, multiline: true, maxLength: 1000, autoFocus: autoFocus }),
             react_1.default.createElement(react_native_1.View, { style: styles.buttonContainer },
-                showCancel && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: handleCancel, style: [styles.button, styles.cancelButton] },
-                    react_1.default.createElement(vector_icons_1.Ionicons, { name: "close", size: 20, color: "#666" }))),
+                showCancel && (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: handleCancel, style: [styles.button, { backgroundColor: t.surface }] },
+                    react_1.default.createElement(vector_icons_1.Ionicons, { name: "close", size: 20, color: t.textMuted }))),
                 react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: handleSubmit, disabled: !text.trim(), style: [
                         styles.button,
-                        styles.sendButton,
+                        { backgroundColor: t.surface },
                         !text.trim() && styles.sendButtonDisabled,
                     ] },
-                    react_1.default.createElement(vector_icons_1.Ionicons, { name: "send", size: 18, color: text.trim() ? '#007AFF' : '#ccc' }))))));
+                    react_1.default.createElement(vector_icons_1.Ionicons, { name: "send", size: 18, color: text.trim() ? t.accent : t.textFaint }))))));
 };
 exports.CommentInput = CommentInput;
 const styles = react_native_1.StyleSheet.create({

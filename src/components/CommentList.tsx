@@ -96,7 +96,10 @@ export const CommentList: React.FC<CommentListProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flexGrow (basis auto) instead of `flex: 1` (basis 0): inside a ScrollView /
+    // an auto-height parent on native, basis 0 collapses the list to 0px.
+    flexGrow: 1,
+    flexShrink: 1,
     paddingHorizontal: 12,
   },
 });

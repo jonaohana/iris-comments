@@ -44,6 +44,14 @@ export interface CommentPanelProps {
   enableEditing?: boolean; // Default: true
   enableDeleting?: boolean; // Default: true
   enableReplies?: boolean; // Default: true
+  /**
+   * Inline / embedded mode (e.g. a thread expanded inside a feed card): the
+   * panel sizes to its content instead of `flex: 1` (which collapses to 0px on
+   * native when the parent has no fixed height), the list scrolls once it
+   * passes `inlineMaxListHeight`, and the input stays visible below it.
+   */
+  inline?: boolean;
+  inlineMaxListHeight?: number; // Default: 320
 }
 
 export interface CommentItemProps {

@@ -4,3 +4,18 @@ node_modules/
 .env
 .env.local
 *.tsbuildinfo
+
+# Local-only files and credentials
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+certs/
+.keys/
+.iris_tmp/
+_staging/
+_to_delete*
+*.bak*
+*.pem
+*.key

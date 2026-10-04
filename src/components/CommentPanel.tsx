@@ -33,6 +33,8 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
   enableDeleting = true,
   enableReplies = true,
   theme,
+  inline = false,
+  inlineMaxListHeight = 320,
 }) => {
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'popular'>('newest');
   const t = { ...DEFAULT_COMMENT_THEME, ...(theme ?? {}) };
@@ -74,7 +76,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
 
   return (
     <CommentThemeContext.Provider value={t}>
-    <View style={[styles.container, { backgroundColor: t.background }]}>
+    <View style={[styles.container, inline ? styles.containerInline : null, { backgroundColor: t.background }]}>
       {showHeader && (
         <View style={[styles.header, { borderBottomColor: t.border }]}>
           <View style={styles.headerLeft}>
@@ -96,9 +98,10 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
 
       {/* Comment List */}
       <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        style={[styles.scrollView, inline ? { flex: 0, flexGrow: 0, maxHeight: inlineMaxListHeight } : null]}
+        contentContainerStyle={[styles.scrollContent, inline ? styles.scrollContentInline : null]}
         showsVerticalScrollIndicator={Platform.OS === 'web'}
+        nestedScrollEnabled={inline}
       >
         {sortedComments.length > 0 ? (
           <CommentList
@@ -118,7 +121,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
             enableReplies={enableReplies}
           />
         ) : (
-          <View style={styles.emptyState}>
+          <View style={[styles.emptyState, inline ? { flex: 0, paddingVertical: 20 } : null]}>
             <Ionicons name="chatbubbles-outline" size={48} color={t.textFaint} />
             <Text style={[styles.emptyStateText, { color: t.textFaint }]}>No comments yet</Text>
             <Text style={[styles.emptyStateSubtext, { color: t.textFaint }]}>Be the first to comment!</Text>
@@ -137,6 +140,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  containerInline: {
+    flex: 0,
+    alignSelf: 'stretch',
   },
   header: {
     paddingHorizontal: 16,
@@ -194,6 +201,10 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingVertical: 12,
     flexGrow: 1,
+  },
+  scrollContentInline: {
+    flexGrow: 0,
+    paddingVertical: 4,
   },
   emptyState: {
     flex: 1,

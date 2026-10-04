@@ -39,8 +39,10 @@ const react_native_1 = require("react-native");
 const vector_icons_1 = require("@expo/vector-icons");
 const CommentList_1 = require("./CommentList");
 const CommentInput_1 = require("./CommentInput");
-const CommentPanel = ({ entityId, comments, currentUserId, currentUserName, currentUserAvatar, onAddComment, onEditComment, onDeleteComment, onLikeComment, onUnlikeComment, placeholder = 'Write a comment...', title = 'Comments', showHeader = true, maxNestingLevel = 3, enableLikes = true, enableEditing = true, enableDeleting = true, enableReplies = true, }) => {
+const theme_1 = require("../theme");
+const CommentPanel = ({ entityId, comments, currentUserId, currentUserName, currentUserAvatar, onAddComment, onEditComment, onDeleteComment, onLikeComment, onUnlikeComment, placeholder = 'Write a comment...', title = 'Comments', showHeader = true, maxNestingLevel = 3, enableLikes = true, enableEditing = true, enableDeleting = true, enableReplies = true, theme, inline = false, inlineMaxListHeight = 320, }) => {
     const [sortBy, setSortBy] = (0, react_1.useState)('newest');
+    const t = { ...theme_1.DEFAULT_COMMENT_THEME, ...(theme ?? {}) };
     const sortedComments = [...comments].sort((a, b) => {
         switch (sortBy) {
             case 'newest':
@@ -60,40 +62,38 @@ const CommentPanel = ({ entityId, comments, currentUserId, currentUserName, curr
         onAddComment(text, parentId);
     };
     const commentCount = comments.length;
-    return (react_1.default.createElement(react_native_1.View, { style: styles.container },
-        showHeader && (react_1.default.createElement(react_native_1.View, { style: styles.header },
-            react_1.default.createElement(react_native_1.View, { style: styles.headerLeft },
-                react_1.default.createElement(vector_icons_1.Ionicons, { name: "chatbubbles", size: 20, color: "#007AFF" }),
-                react_1.default.createElement(react_native_1.Text, { style: styles.title }, title),
-                react_1.default.createElement(react_native_1.View, { style: styles.countBadge },
-                    react_1.default.createElement(react_native_1.Text, { style: styles.countText }, commentCount))),
-            react_1.default.createElement(react_native_1.View, { style: styles.sortContainer },
-                react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setSortBy('newest'), style: [styles.sortButton, sortBy === 'newest' && styles.sortButtonActive] },
-                    react_1.default.createElement(react_native_1.Text, { style: [
-                            styles.sortButtonText,
-                            sortBy === 'newest' && styles.sortButtonTextActive,
-                        ] }, "Newest")),
-                react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setSortBy('popular'), style: [styles.sortButton, sortBy === 'popular' && styles.sortButtonActive] },
-                    react_1.default.createElement(react_native_1.Text, { style: [
-                            styles.sortButtonText,
-                            sortBy === 'popular' && styles.sortButtonTextActive,
-                        ] }, "Popular")),
-                react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setSortBy('oldest'), style: [styles.sortButton, sortBy === 'oldest' && styles.sortButtonActive] },
-                    react_1.default.createElement(react_native_1.Text, { style: [
-                            styles.sortButtonText,
-                            sortBy === 'oldest' && styles.sortButtonTextActive,
-                        ] }, "Oldest"))))),
-        react_1.default.createElement(react_native_1.ScrollView, { style: styles.scrollView, contentContainerStyle: styles.scrollContent, showsVerticalScrollIndicator: react_native_1.Platform.OS === 'web' }, sortedComments.length > 0 ? (react_1.default.createElement(CommentList_1.CommentList, { comments: sortedComments, currentUserId: currentUserId, currentUserName: currentUserName, currentUserAvatar: currentUserAvatar, maxNestingLevel: maxNestingLevel, onReply: handleReply, onEdit: onEditComment, onDelete: onDeleteComment, onLike: onLikeComment, onUnlike: onUnlikeComment, enableLikes: enableLikes, enableEditing: enableEditing, enableDeleting: enableDeleting, enableReplies: enableReplies })) : (react_1.default.createElement(react_native_1.View, { style: styles.emptyState },
-            react_1.default.createElement(vector_icons_1.Ionicons, { name: "chatbubbles-outline", size: 48, color: "#ccc" }),
-            react_1.default.createElement(react_native_1.Text, { style: styles.emptyStateText }, "No comments yet"),
-            react_1.default.createElement(react_native_1.Text, { style: styles.emptyStateSubtext }, "Be the first to comment!")))),
-        react_1.default.createElement(CommentInput_1.CommentInput, { onSubmit: handleAddComment, placeholder: placeholder })));
+    const sortBtn = (key, label) => {
+        const active = sortBy === key;
+        return (react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: () => setSortBy(key), style: [styles.sortButton, { backgroundColor: active ? t.accent : t.surface }] },
+            react_1.default.createElement(react_native_1.Text, { style: [styles.sortButtonText, { color: active ? '#fff' : t.textMuted }] }, label)));
+    };
+    return (react_1.default.createElement(theme_1.CommentThemeContext.Provider, { value: t },
+        react_1.default.createElement(react_native_1.View, { style: [styles.container, inline ? styles.containerInline : null, { backgroundColor: t.background }] },
+            showHeader && (react_1.default.createElement(react_native_1.View, { style: [styles.header, { borderBottomColor: t.border }] },
+                react_1.default.createElement(react_native_1.View, { style: styles.headerLeft },
+                    react_1.default.createElement(vector_icons_1.Ionicons, { name: "chatbubbles", size: 20, color: t.accent }),
+                    react_1.default.createElement(react_native_1.Text, { style: [styles.title, { color: t.text }] }, title),
+                    react_1.default.createElement(react_native_1.View, { style: [styles.countBadge, { backgroundColor: t.surface }] },
+                        react_1.default.createElement(react_native_1.Text, { style: [styles.countText, { color: t.textMuted }] }, commentCount))),
+                react_1.default.createElement(react_native_1.View, { style: styles.sortContainer },
+                    sortBtn('newest', 'Newest'),
+                    sortBtn('popular', 'Popular'),
+                    sortBtn('oldest', 'Oldest')))),
+            react_1.default.createElement(react_native_1.ScrollView, { style: [styles.scrollView, inline ? { flex: 0, flexGrow: 0, maxHeight: inlineMaxListHeight } : null], contentContainerStyle: [styles.scrollContent, inline ? styles.scrollContentInline : null], showsVerticalScrollIndicator: react_native_1.Platform.OS === 'web', nestedScrollEnabled: inline }, sortedComments.length > 0 ? (react_1.default.createElement(CommentList_1.CommentList, { comments: sortedComments, currentUserId: currentUserId, currentUserName: currentUserName, currentUserAvatar: currentUserAvatar, maxNestingLevel: maxNestingLevel, onReply: handleReply, onEdit: onEditComment, onDelete: onDeleteComment, onLike: onLikeComment, onUnlike: onUnlikeComment, enableLikes: enableLikes, enableEditing: enableEditing, enableDeleting: enableDeleting, enableReplies: enableReplies })) : (react_1.default.createElement(react_native_1.View, { style: [styles.emptyState, inline ? { flex: 0, paddingVertical: 20 } : null] },
+                react_1.default.createElement(vector_icons_1.Ionicons, { name: "chatbubbles-outline", size: 48, color: t.textFaint }),
+                react_1.default.createElement(react_native_1.Text, { style: [styles.emptyStateText, { color: t.textFaint }] }, "No comments yet"),
+                react_1.default.createElement(react_native_1.Text, { style: [styles.emptyStateSubtext, { color: t.textFaint }] }, "Be the first to comment!")))),
+            react_1.default.createElement(CommentInput_1.CommentInput, { onSubmit: handleAddComment, placeholder: placeholder }))));
 };
 exports.CommentPanel = CommentPanel;
 const styles = react_native_1.StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+    },
+    containerInline: {
+        flex: 0,
+        alignSelf: 'stretch',
     },
     header: {
         paddingHorizontal: 16,
@@ -151,6 +151,10 @@ const styles = react_native_1.StyleSheet.create({
     scrollContent: {
         paddingVertical: 12,
         flexGrow: 1,
+    },
+    scrollContentInline: {
+        flexGrow: 0,
+        paddingVertical: 4,
     },
     emptyState: {
         flex: 1,

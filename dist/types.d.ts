@@ -17,7 +17,10 @@ export interface CommentReaction {
     type: 'like' | 'love' | 'laugh' | 'wow' | 'sad' | 'angry';
     createdAt: string;
 }
+import type { CommentTheme } from './theme';
 export interface CommentPanelProps {
+    /** Optional color overrides so the host app can match its own theme (e.g. dark mode). */
+    theme?: Partial<CommentTheme>;
     entityId: string;
     comments: Comment[];
     currentUserId: string;
@@ -36,6 +39,14 @@ export interface CommentPanelProps {
     enableEditing?: boolean;
     enableDeleting?: boolean;
     enableReplies?: boolean;
+    /**
+     * Inline / embedded mode (e.g. a thread expanded inside a feed card): the
+     * panel sizes to its content instead of `flex: 1` (which collapses to 0px on
+     * native when the parent has no fixed height), the list scrolls once it
+     * passes `inlineMaxListHeight`, and the input stays visible below it.
+     */
+    inline?: boolean;
+    inlineMaxListHeight?: number;
 }
 export interface CommentItemProps {
     comment: Comment;
