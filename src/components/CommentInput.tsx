@@ -21,6 +21,12 @@ export const CommentInput: React.FC<CommentInputProps> = ({
 }) => {
   const t = useCommentTheme();
   const [text, setText] = useState(initialValue);
+  // Auto-grow: start as a single, vertically centered line (RN-web renders multiline as a 2-row <textarea>).
+  const [contentHeight, setContentHeight] = useState(INPUT_LINE_HEIGHT);
+  const inputHeight = Math.min(
+    INPUT_MAX_HEIGHT,
+    Math.max(INPUT_MIN_HEIGHT, contentHeight + INPUT_VERTICAL_PADDING * 2),
+  );
 
   const handleSubmit = () => {
     if (text.trim()) {
@@ -41,7 +47,9 @@ export const CommentInput: React.FC<CommentInputProps> = ({
     >
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, { borderColor: t.border, backgroundColor: t.inputBackground, color: t.text }]}
+          style={[styles.input, { height: inputHeight, borderColor: t.border, backgroundColor: t.inputBackground, color: t.text }]}
+          numberOfLines={1}
+          onContentSizeChange={(e) => setContentHeight(Math.ceil(e.nativeEvent.contentSize.height))}
           value={text}
           onChangeText={setText}
           placeholder={placeholder}
@@ -80,6 +88,11 @@ export const CommentInput: React.FC<CommentInputProps> = ({
   );
 };
 
+const INPUT_LINE_HEIGHT = 20;
+const INPUT_VERTICAL_PADDING = 8;
+const INPUT_MIN_HEIGHT = 36;
+const INPUT_MAX_HEIGHT = 100;
+
 const styles = StyleSheet.create({
   container: {
     borderTopWidth: 1,
@@ -94,15 +107,17 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    minHeight: 36,
-    maxHeight: 100,
+    minHeight: INPUT_MIN_HEIGHT,
+    maxHeight: INPUT_MAX_HEIGHT,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: '#e0e0e0',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    paddingTop: 8,
+    paddingHorizontal: 14,
+    paddingTop: INPUT_VERTICAL_PADDING,
+    paddingBottom: INPUT_VERTICAL_PADDING,
     fontSize: 15,
+    lineHeight: INPUT_LINE_HEIGHT,
+    textAlignVertical: 'center',
     backgroundColor: '#f8f8f8',
   },
   buttonContainer: {
