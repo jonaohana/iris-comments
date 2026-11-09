@@ -52,6 +52,10 @@ export interface CommentPanelProps {
    */
   inline?: boolean;
   inlineMaxListHeight?: number; // Default: 320
+  /** Set when the viewer can't write (e.g. signed out): the input is faded and shows this instead. */
+  lockedMessage?: string;
+  /** Tapping the locked input (usually: go to sign-in). */
+  onLockedPress?: () => void;
 }
 
 export interface CommentItemProps {
@@ -80,4 +84,6 @@ export interface CommentInputProps {
   initialValue?: string;
   onCancel?: () => void;
   showCancel?: boolean;
+  lockedMessage?: string;
+  onLockedPress?: () => void;
 }

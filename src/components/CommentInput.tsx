@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   View,
+  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
@@ -18,6 +19,8 @@ export const CommentInput: React.FC<CommentInputProps> = ({
   initialValue = '',
   onCancel,
   showCancel = false,
+  lockedMessage,
+  onLockedPress,
 }) => {
   const t = useCommentTheme();
   const [text, setText] = useState(initialValue);
@@ -39,6 +42,28 @@ export const CommentInput: React.FC<CommentInputProps> = ({
     setText('');
     onCancel?.();
   };
+
+  if (lockedMessage) {
+    return (
+      <View style={[styles.container, { borderTopColor: t.border, backgroundColor: t.background }]}>
+        <TouchableOpacity
+          onPress={onLockedPress}
+          disabled={!onLockedPress}
+          accessibilityRole="button"
+          accessibilityLabel={lockedMessage}
+          style={[styles.inputContainer, styles.locked]}
+        >
+          <View style={[styles.input, styles.lockedField, { borderColor: t.border, backgroundColor: t.inputBackground }]}>
+            <Ionicons name="lock-closed-outline" size={15} color={t.textMuted} />
+            <Text style={[styles.lockedText, { color: t.textMuted }]} numberOfLines={1}>{lockedMessage}</Text>
+          </View>
+          <View style={[styles.button, { backgroundColor: t.surface, marginLeft: 8 }]}>
+            <Ionicons name="send" size={18} color={t.textFaint} />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -140,5 +165,20 @@ const styles = StyleSheet.create({
   },
   sendButtonDisabled: {
     opacity: 0.5,
+  },
+  locked: {
+    opacity: 0.65,
+  },
+  lockedField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    height: INPUT_MIN_HEIGHT,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  lockedText: {
+    flexShrink: 1,
+    fontSize: 14,
   },
 });

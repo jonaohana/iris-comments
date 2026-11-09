@@ -35,6 +35,8 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
   theme,
   inline = false,
   inlineMaxListHeight = 320,
+  lockedMessage,
+  onLockedPress,
 }) => {
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'popular'>('newest');
   const t = { ...DEFAULT_COMMENT_THEME, ...(theme ?? {}) };
@@ -130,7 +132,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
       </ScrollView>
 
       {/* Comment Input */}
-      <CommentInput onSubmit={handleAddComment} placeholder={placeholder} />
+      <CommentInput onSubmit={handleAddComment} placeholder={placeholder} lockedMessage={lockedMessage} onLockedPress={onLockedPress} />
     </View>
     </CommentThemeContext.Provider>
   );
